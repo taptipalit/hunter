@@ -20,7 +20,7 @@ while read host;
 	do echo "Launching clients on $host";
 	ssh "$user@$host" "mkdir $remoteOutputPath"
 	while read cmd;
-		do echo "Running command $cmd";
+		do echo "Running command $cmd --output-log=$remoteOutputPath/result$i.log --num-sessions=$numSessions --rate=$rate";
 		ssh "$user@$host" "$cmd --output-log=$remoteOutputPath/result$i.log --num-sessions=$numSessions --rate=$rate" > "stdout$i" &
 		i=$((i+1))
 	done < "$cmdFileName"
