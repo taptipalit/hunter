@@ -5,8 +5,8 @@ cmdFileName="$2"
 remoteOutputPath="$3"
 user="$4"
 
-minNumSessions="$5"
-maxNumSessions="$6"
+totalMinNumSessions="$5"
+totalMaxNumSessions="$6"
 
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ] || [ -z "$6" ] 
 then
@@ -14,6 +14,17 @@ then
 	echo "launch_hunt.sh <host_list_file> <command_list_file> <remote_output_path> <remote_ssh_user> <min_num_sessions> <max_num_sessions>"
 	exit 
 fi
+
+# Distribute the load
+numHosts=$(wc -l < $hostFileName)
+numClientsPerHost=$(wc -l < $cmdFileName)
+numTotalClients=$(echo "$numHosts*$numClientsPerHost" | bc)
+minNumSessions=$(echo "$totalMinNumSessions/$numTotalClients" | bc)
+maxNumSessions=$(echo "$totalMaxNumSessions/$numTotalClients" | bc)
+
+# echo "Total clients = $numTotalClients"
+# echo "Minimum number of sessions = $minNumSessions"
+# echo "Maximum number of sessions = $maxNumSessions"
 
 benchmarkSuccess=1
 
@@ -101,7 +112,8 @@ do
 	diff=$((maxNumSessions-minNumSessions))
 	if [ $diff -le 50 ]
 	then
-		echo "The maximum throughput is $numSessions"
+		maxThroughput=$(echo "$numSessions*$totalClients" | bc)
+		echo "Benchmark succeeded for maximum sessions: $maxThroughput"
 		exit 0
 	fi
 	delta=$(((maxNumSessions-minNumSessions)/2))
