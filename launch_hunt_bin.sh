@@ -54,7 +54,10 @@ function launchRemote () {
 		totalConns="$((totalConns+numConns))"
 		totalErrors="$((totalErrors+numErrors))"
 	done
-	percFailure=$((totalErrors/totalConns*100))
+	percFailure=$(echo "$totalErrors/$totalConns*100" | bc -l)
+	percFailure=$(echo "$percFailure/1" | bc)
+	#echo "Total conns = $totalConns"
+	#echo "Total errors = $totalErrors"
 	echo "Percentage failure = $percFailure"
 	if [ "$percFailure" -gt 5 ]; then
 		echo 'Benchmark failed. Please see the stdout directory for last successful run.'	
@@ -84,7 +87,7 @@ if [ $benchmarkSuccess -eq 1 ]
 then
 	echo "Benchmark succeeded for $maxNumSessions sessions"
 	echo "Maximum limit for number of sessions too low."
-	#exit 0
+	exit 0
 else
 	echo "Benchmark failed for $maxNumSessions sessions"
 fi
