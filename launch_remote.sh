@@ -13,7 +13,7 @@ rate="${10}"
 
 user="${11}"
 
-#set -x
+set -x
 i=1
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ] || [ -z "$6" ] || [ -z "$7" ] || [ -z "$8" ] || [ -z "$9" ] || [ -z "${10}" ] || [ -z "${11}" ]
 then
@@ -26,6 +26,7 @@ while read hostLine
 do
 	host="$(echo $hostLine | awk '{print $1}')"
 
+	ssh "$user@$host" "sudo docker exec streaming_client mkdir $remoteOutputPath/results"
 	echo "Launching clients on $host";
 	clientIp1="$(echo $hostLine | awk '{print $2}')"
 	clientIp2="$(echo $hostLine | awk '{print $3}')"
@@ -35,7 +36,7 @@ do
  	do
 		cmd="./httperf --hog --server $videoServerIp --videosesslog=[$log1,$log2,$log3,$log4],[0.1,0.3,0.4,0.2],[$clientIp1,$clientIp2,$clientIp3,$clientIp4] --epoll --recv-buffer=524288 --port 80 --output-log=/benchmarking/results/result$i.log --num-sessions=$numSessions --rate=$rate"; 
 		echo "Running command $cmd"
-		ssh "$user@$host " "docker exec client_docker $cmd" > "stdout$i" &
+		ssh "$user@$host" "sudo docker exec streaming_client $cmd" > "stdout$i" &
 	done 
 	wait
 	# Copy over the logs
