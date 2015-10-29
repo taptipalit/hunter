@@ -94,11 +94,11 @@ launchRemote $minNumSessions
 
 if [ $benchmarkSuccess -eq 0 ]
 then
-	echo "Benchmark failed for $minNumSessions sessions"
+	echo "Benchmark failed for $totalMinNumSessions sessions"
 	echo "Minimum Limit for number of sessions too high."
 	exit 0
 else
-	echo "Benchmark succeeded for $minNumSessions sessions"
+	echo "Benchmark succeeded for $totalMinNumSessions sessions"
 fi
 
 
@@ -107,21 +107,18 @@ launchRemote $maxNumSessions
 
 if [ $benchmarkSuccess -eq 1 ]
 then
-	echo "Benchmark succeeded for $maxNumSessions sessions"
+	echo "Benchmark succeeded for $totalMaxNumSessions sessions"
 	echo "Maximum limit for number of sessions too low."
-	exit 0
+	# exit 0
 else
-	echo "Benchmark failed for $maxNumSessions sessions"
+	echo "Benchmark failed for $totalMaxNumSessions sessions"
 fi
-
-lowLimSessions=$minNumSessions
-hiLimSessions=$maxNumSessions
 
 # Launch binary search
 while :
 do
 	diff=$((maxNumSessions-minNumSessions))
-	if [ $diff -le 50 ]
+	if [ $diff -le 5 ]
 	then
 		maxThroughput=$(echo "$numSessions*$numTotalClients" | bc)
 		echo "Benchmark succeeded for maximum sessions: $maxThroughput"

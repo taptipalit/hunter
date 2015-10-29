@@ -39,7 +39,7 @@ do
 	done 
 	wait
 	# Copy over the logs
-	cmd="scp -r $user@$host:$remoteOutputPath/results/\* ./output/"
+	cmd="scp -r $user@$host:$remoteOutputPath/results/ ./output/"
 	echo $cmd
 	eval $cmd
 	ssh "$user@$host" "sudo rm  $remoteOutputPath/results/*"
