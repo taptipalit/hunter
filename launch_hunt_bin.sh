@@ -56,7 +56,7 @@ function launchRemote () {
 	numSessions="$1"
 	rate=$((numSessions/10))
 	cp ./stdout* $backUpStdoutDir/
-	./launch_remote.sh "$hostFileName" "$numClientsPerHost" "$videoServerIp" "$log1" "$log2" "$g3" "$log4" "$numSessions" "$remoteOutputPath" "$rate" "$user"
+	./launch_remote.sh "$hostFileName" "$numClientsPerHost" "$videoServerIp" "$log1" "$log2" "$log3" "$log4" "$numSessions" "$remoteOutputPath" "$rate" "$user"
 	if [ $? -ne 0 ]; then
 		echo 'Failed launching remote... exiting.'
 		exit
