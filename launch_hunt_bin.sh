@@ -13,6 +13,10 @@ user="$9"
 totalMinNumSessions="${10}"
 totalMaxNumSessions="${11}"
 
+#set -x
+
+mkdir ./output
+
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ] || [ -z "$6" ] || [ -z "$7" ] || [ -z "$8" ] || [ -z "$9" ] || [ -z "${10}" ] || [ -z "${11}" ]
 then
 	echo "Usage:"
@@ -46,6 +50,9 @@ if [ -d "$backUpStdoutDir" ]; then
 fi
 
 mkdir "$backUpStdoutDir"
+
+
+docker exec client_docker mkdir /benchmarking/results
 
 # Launches remote with the specified number of sessions. 
 # Sets benchmarkSuccess to 1 or 0 depending on success/failure

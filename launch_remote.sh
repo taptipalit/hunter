@@ -13,6 +13,7 @@ rate="${10}"
 
 user="${11}"
 
+#set -x
 i=1
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ] || [ -z "$6" ] || [ -z "$7" ] || [ -z "$8" ] || [ -z "$9" ] || [ -z "${10}" ] || [ -z "${11}" ]
 then
@@ -32,15 +33,15 @@ do
 	clientIp4="$(echo $hostLine | awk '{print $5}')"
 	for i in $(seq 1 $numClientPerHost)
  	do
-		cmd="./httperf --hog --server $videoServerIp --videosesslog=[$log1,$log2,$log3,$log4],[0.1,0.3,0.4,0.2],[$clientIp1,$clientIp2,$clientIp3,$clientIp4] --epoll --recv-buffer=524288 --port 80 --output-log=$remoteOutputPath/result$i.log --num-sessions=$numSessions --rate=$rate"; 
+		cmd="./httperf --hog --server $videoServerIp --videosesslog=[$log1,$log2,$log3,$log4],[0.1,0.3,0.4,0.2],[$clientIp1,$clientIp2,$clientIp3,$clientIp4] --epoll --recv-buffer=524288 --port 80 --output-log=/benchmarking/results/result$i.log --num-sessions=$numSessions --rate=$rate"; 
 		echo "Running command $cmd"
-		ssh "$user@$host -p 22" "docker exec client_docker $cmd" > "stdout$i" &
+		ssh "$user@$host " "docker exec client_docker $cmd" > "stdout$i" &
 	done 
 	wait
 	# Copy over the logs
-	cmd="scp -r $user@$host:$remoteOutputPath/result\* ./output/"
+	cmd="scp -r $user@$host:$remoteOutputPath/results/\* ./output/"
 	echo $cmd
 	eval $cmd
-	ssh "$user@$host" "rm  $remoteOutputPath/result*"
+	ssh "$user@$host" "sudo rm  $remoteOutputPath/results/*"
 done < "$hostFileName"
 
