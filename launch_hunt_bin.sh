@@ -16,7 +16,7 @@ totalMaxNumSessions="${11}"
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ] || [ -z "$6" ] || [ -z "$7" ] || [ -z "$8" ] || [ -z "$9" ] || [ -z "${10}" ] || [ -z "${11}" ]
 then
 	echo "Usage:"
-	echo "launch_hunt.sh <host_list_file> <num_clients_per_host> <video_server_ip> <log1> <log2> <log3> <log4>  <remote_output_path> <remote_ssh_user> <min_num_sessions> <max_num_sessions>"
+	echo "launch_hunt_bin.sh <host_list_file> <num_clients_per_host> <video_server_ip> <log1> <log2> <log3> <log4>  <remote_output_path> <remote_ssh_user> <min_num_sessions> <max_num_sessions>"
 	exit 
 fi
 
@@ -56,7 +56,7 @@ function launchRemote () {
 	numSessions="$1"
 	rate=$((numSessions/10))
 	cp ./stdout* $backUpStdoutDir/
-	./launch_remote.sh "$hostFileName" "$numClientsPerHost" "$videoServerIp" "log1" "log2" "log3" "log4" "$numSessions" "$remoteOutputPath" "$rate" "$user"
+	./launch_remote.sh "$hostFileName" "$numClientsPerHost" "$videoServerIp" "$log1" "$log2" "$g3" "$log4" "$numSessions" "$remoteOutputPath" "$rate" "$user"
 	if [ $? -ne 0 ]; then
 		echo 'Failed launching remote... exiting.'
 		exit
